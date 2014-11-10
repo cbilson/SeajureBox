@@ -1,0 +1,42 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] ||= 'azure'
+
+require 'yaml'
+private_settings = YAML.load_file '.private-settings.yaml'
+
+Vagrant.configure('2') do |config|
+  config.vm.box = 'seajure'
+  config.vm.provision :shell, :path => 'bootstrap.sh'
+  config.vm.synced_folder '.', '/vagrant', :disabled => true
+
+  config.vm.provider :azure do |azure, override|
+    azure.mgmt_certificate = private_settings['azure_management_certificate']
+    azure.mgmt_endpoint = 'https://management.core.windows.net/'
+    azure.subscription_id = private_settings['azure_subscription_id']
+    azure.storage_acct_name = private_settings['azure_storage_account_name']
+    azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140618.1-en-us-30GB'
+    azure.vm_user = private_settings['vm_user']
+    azure.vm_password = private_settings['vm_password']
+    azure.vm_name = 'seajure'
+    azure.cloud_service_name = 'seajure'
+    azure.vm_location = 'West US'
+    # azure.ssh_private_key_file = '**TODO: SSH PK**'
+    # azure.ssh_certificate_file = '**TODO: SSH PEM**'
+    azure.ssh_port = '22'
+    azure.tcp_endpoints = '8080'
+
+    override.vm.box = 'azuredummybox'
+    override.ssh.username = private_settings['vm_user']
+    override.ssh.password = private_settings['vm_password']
+  end
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = private_settings['aws_access_key_id']
+    aws.secret_access_key = private_settings['aws_secret_access_key']
+    aws.keypair_name = private_settings['aws_keypair_name']
+    aws.ami = 'ami-7747d01e'
+
+    override.ssh.username = private_settings['vm_user']
+    #override.ssh.private_key_path = 
+    override.ssh.password = private_settings['vm_password']
+  end
+end

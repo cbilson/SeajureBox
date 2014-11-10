@@ -1,0 +1,21 @@
+#DO NOT re-commit this file, should be under .gitignore 
+
+# Common Settings
+#ssh_private_key_file: ''
+#ssh_certificate_file: ''
+vm_user: 'swarm' 
+vm_password: 'Secret!Stuff' 
+
+# Azure Settings
+azure_subscription_id: 'deadbeef-dead-beef-dead-beefdeadbeef' #Your subscription ID 
+azure_storage_account_name: 'seajure' 
+azure_service_name: 'seajure' 
+azure_deployment_name: 'seajure' 
+
+# use xplat azure tools to get this: `azure account cert export -f AzureManagement.pem`
+azure_management_certificate: 'AzureManagement.pem'
+
+# EC2 Settings
+aws_access_key_id: 'ABCDEFGHIJKLMNOPQRST'
+aws_secret_access_key: '123456890abcdefghijklmnopqrstuvwxyzABCDE'
+aws_keypair_name: 'seajure'
